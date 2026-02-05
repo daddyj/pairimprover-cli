@@ -1,0 +1,82 @@
+/**
+ * Terminal output formatter
+ * 
+ * Formats analysis results for beautiful terminal display
+ */
+
+import chalk from 'chalk';
+import { AnalyzeResponse } from './api-client.js';
+
+export function formatResults(response: AnalyzeResponse): string {
+  const { analysis } = response;
+  const lines: string[] = [];
+
+  // Header
+  lines.push('');
+  lines.push(chalk.bold('━'.repeat(60)));
+  lines.push(chalk.bold(`📊 Results: ${analysis.overallScore.toFixed(1)}/10 (${getGrade(analysis.overallScore)})`));
+  lines.push(chalk.bold('━'.repeat(60)));
+  lines.push('');
+
+  // Strengths
+  if (analysis.strengths.length > 0) {
+    lines.push(chalk.bold.green('💪 What you\'re doing well:'));
+    analysis.strengths.slice(0, 3).forEach(strength => {
+      lines.push(chalk.green(`   ${strength.description || strength.title}`));
+    });
+    lines.push('');
+  }
+
+  // Growth Areas
+  if (analysis.growthAreas.length > 0) {
+    lines.push(chalk.bold.yellow('🎯 Areas for growth:'));
+    analysis.growthAreas.slice(0, 3).forEach(area => {
+      lines.push(chalk.yellow(`   ${area.description || area.title}`));
+    });
+    lines.push('');
+  }
+
+  // Action Items
+  if (analysis.actionItems.length > 0) {
+    lines.push(chalk.bold.cyan('🎯 Top Quick Wins:'));
+    lines.push('');
+    analysis.actionItems.slice(0, 3).forEach((action, index) => {
+      lines.push(chalk.cyan(`${index + 1}. ${action}`));
+      lines.push(chalk.gray(`   ⏱  15 minutes  💪 Impact: High  🎯 ${analysis.metadata.framework}`));
+    });
+    lines.push('');
+  }
+
+  // Footer with upgrade CTA
+  lines.push(chalk.bold('━'.repeat(60)));
+  lines.push(chalk.bold.magenta('💎 Want to track your improvement over time?'));
+  lines.push(chalk.gray('   Upgrade to Pro: $29/month'));
+  lines.push(chalk.gray('   • Unlimited analyses'));
+  lines.push(chalk.gray('   • 5-10 actions per session'));
+  lines.push(chalk.gray('   • Historical tracking'));
+  lines.push(chalk.gray('   • Pattern recognition'));
+  lines.push('');
+  lines.push(chalk.gray('   Visit: https://pairimprover.com/pricing'));
+  lines.push(chalk.bold('━'.repeat(60)));
+  lines.push('');
+
+  return lines.join('\n');
+}
+
+function getGrade(score: number): string {
+  if (score >= 9.0) return chalk.green('Excellent');
+  if (score >= 8.0) return chalk.green('Strong');
+  if (score >= 7.0) return chalk.cyan('Good');
+  if (score >= 6.0) return chalk.yellow('Fair');
+  return chalk.red('Needs Work');
+}
+
+export function formatMetadata(response: AnalyzeResponse): string {
+  const { analysis } = response;
+  const lines: string[] = [];
+
+  lines.push(chalk.gray(`✓ Parsed: ${analysis.metadata.lineCount.toLocaleString()} lines`));
+  lines.push(chalk.gray(`✓ Framework: ${analysis.metadata.framework} (${Math.round(analysis.metadata.frameworkDetectionConfidence * 100)}% confidence)`));
+  
+  return lines.join('\n');
+}
