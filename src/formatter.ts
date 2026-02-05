@@ -14,13 +14,17 @@ export function formatResults(response: AnalyzeResponse): string {
   // Header
   lines.push('');
   lines.push(chalk.bold('━'.repeat(60)));
-  lines.push(chalk.bold(`📊 Results: ${analysis.overallScore.toFixed(1)}/10 (${getGrade(analysis.overallScore)})`));
+  lines.push(chalk.bold(`📊 Session Quality: ${analysis.overallScore.toFixed(1)}/10 (${getGrade(analysis.overallScore)})`));
   lines.push(chalk.bold('━'.repeat(60)));
+  lines.push('');
+  
+  // Disclaimer
+  lines.push(chalk.gray('ℹ️  Analysis based on this session only, not your entire codebase.'));
   lines.push('');
 
   // Strengths
   if (analysis.strengths.length > 0) {
-    lines.push(chalk.bold.green('💪 What you\'re doing well:'));
+    lines.push(chalk.bold.green('💪 What worked well in this session:'));
     analysis.strengths.slice(0, 3).forEach(strength => {
       lines.push(chalk.green(`   ${strength.description || strength.title}`));
     });
@@ -29,7 +33,7 @@ export function formatResults(response: AnalyzeResponse): string {
 
   // Growth Areas
   if (analysis.growthAreas.length > 0) {
-    lines.push(chalk.bold.yellow('🎯 Areas for growth:'));
+    lines.push(chalk.bold.yellow('🎯 Opportunities you might have missed:'));
     analysis.growthAreas.slice(0, 3).forEach(area => {
       lines.push(chalk.yellow(`   ${area.description || area.title}`));
     });
@@ -38,7 +42,7 @@ export function formatResults(response: AnalyzeResponse): string {
 
   // Action Items
   if (analysis.actionItems.length > 0) {
-    lines.push(chalk.bold.cyan('🎯 Top Quick Wins:'));
+    lines.push(chalk.bold.cyan('💡 Quick Wins (based on what was discussed):'));
     lines.push('');
     analysis.actionItems.slice(0, 3).forEach((action, index) => {
       lines.push(chalk.cyan(`${index + 1}. ${action}`));

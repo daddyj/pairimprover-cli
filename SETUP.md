@@ -64,7 +64,6 @@ npm run analyze -- ~/path/to/your-session.md
 - Takes 20-60 seconds (depending on size)
 - Shows progress spinner
 - Displays results in terminal
-- Auto-opens browser (use `--no-open` to disable)
 
 ---
 
@@ -169,35 +168,33 @@ After testing, please share:
 4. **Would you pay $29/month for this?** (Y/N/Maybe)
 5. **What's the #1 thing that would make it more valuable?** (open)
 
-**Send to:** [Your preferred contact method]
+**Send to:** acun@pairimprover.com
 
 ### Detailed Feedback (15-30 min)
 
-Want to do a quick call? I'll buy you coffee! ☕
-
-Book here: [Your calendly link]
+Want to do a quick call? I'd love to hear your thoughts in detail!
 
 ---
 
 ## 🎁 Thank You!
 
-Your feedback is invaluable. You're helping shape a tool that will improve code quality for thousands of developers.
+Your feedback is invaluable. You're helping me shape a tool that will improve code quality for thousands of developers.
 
 **As a thank you:**
 
-- 🎟️ Free Pro tier for life (when we launch)
+- 🎟️ Free Pro tier for life (when I launch it)
 - 🏆 Listed as beta tester (if you want)
 - ☕ Virtual coffee chat with me
 
 ---
 
-## 📞 Contact
+## ✉️ Contact
 
 **Questions?** Reach out anytime:
 
 - GitHub Issues: https://github.com/daddyj/pairimprover-cli/issues
 - Email: acun@pairimprover.com
-- Twitter: [@yourhandle]
+- LinkedIn: www.linkedin.com/in/acun-guersoy
 
 ---
 

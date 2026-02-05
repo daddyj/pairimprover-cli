@@ -1,4 +1,4 @@
-# 🎯 pAIrImprover CLI (Beta)
+# pAIrImprover CLI (Beta)
 
 **Privacy-first AI code quality analysis for React Native developers.**
 
@@ -11,14 +11,20 @@ Analyze your AI coding sessions and get actionable feedback on patterns, testing
 ```bash
 $ npm run analyze -- session.md
 
-📊 Results: 7.8/10 (Good)
+📊 Session Quality: 7.8/10 (Good)
 
-💪 What you're doing well:
+ℹ️  Analysis based on this session only, not your entire codebase.
+
+💪 What worked well in this session:
    Strong BDD testing approach, focusing on user experience
    Good library-first thinking with battle-tested solutions
    Performance-conscious decisions throughout
 
-🎯 Top 3 Quick Wins:
+🎯 Opportunities you might have missed:
+   No error boundaries implemented for production-ready apps
+   Testing setup could be simplified with better patterns
+
+💡 Quick Wins (based on what was discussed):
 
 1. Add React Native error boundaries in main App component
    ⏱ 15 min  💪 High impact
@@ -30,12 +36,13 @@ $ npm run analyze -- session.md
    ⏱ 15 min  💪 High impact
 ```
 
-**Analysis based on:**
-- ✅ Critical thinking patterns
-- ✅ Library-first mindset
+**What we analyze (from your session):**
+
+- ✅ Critical thinking patterns in your conversations
+- ✅ Library-first mindset vs. custom solutions
 - ✅ Test discipline (BDD, coverage, edge cases)
-- ✅ Architectural decisions
-- ✅ React Native best practices
+- ✅ Architectural decisions and trade-offs
+- ✅ Framework best practices (React Native, Next.js, etc.)
 
 ---
 
@@ -72,6 +79,7 @@ npm run analyze -- ./my-session.md
 ```
 
 **What happens:**
+
 1. 🔒 Your transcript is sent to our backend API
 2. 🤖 AI analyzes your patterns (20-60 seconds)
 3. 📊 You get results in your terminal
@@ -92,25 +100,31 @@ npm run analyze -- session.md --framework react-native
 ## 📁 How to Export Your AI Coding Transcript
 
 ### Cursor
+
 **Option 1:** Export from chat
+
 1. Open the chat → `...` menu → "Export chat" → Save as `.md`
 
 **Option 2:** Find in folder
+
 ```bash
 ~/.cursor/User/workspaceStorage/.../chats/
 ```
 
 ### GitHub Copilot
+
 1. Open Copilot chat panel
 2. Copy conversation to text file
 3. Save as `.md` or `.txt`
 
 ### ChatGPT / Claude / Other
+
 1. Copy the conversation from browser
 2. Save as `.txt` or `.md` file
 3. Ensure it includes both your prompts and AI responses
 
 **Supported formats:**
+
 - Any conversation with user/AI exchanges
 - Code blocks in markdown format (```language)
 - Plain text conversations
@@ -119,7 +133,7 @@ npm run analyze -- session.md --framework react-native
 
 ## 🔒 How It Works (Transparency)
 
-**We believe in full transparency about how your code is handled.**
+**Full transparency about how your code is handled.**
 
 ### Architecture
 
@@ -127,55 +141,57 @@ npm run analyze -- session.md --framework react-native
 Your Machine              Our Backend (Private)
 ────────────              ─────────────────────
 
-1. CLI reads file         
-   [session.md]           
+1. CLI reads file
+   [session.md]
 
 2. POST to API        ──→  3. Parse transcript
    (via HTTPS)             4. Detect framework
                            5. Apply pattern library
 3. Wait for result         6. AI analysis (Claude)
                            7. Generate insights
-                           
+
 4. Display results   ←───  8. Return JSON
                            9. Delete transcript
 ```
 
 ### Privacy Guarantees
 
-| Data | Stored? | Used for Training? | Shared? |
-|------|---------|-------------------|---------|
-| Transcript | ❌ No | ❌ No | ❌ No |
-| Analysis Results | ❌ No | ❌ No | ❌ No |
-| Usage Stats | ✅ Yes (anonymous) | ❌ No | ❌ No |
+| Data             | Stored?            | Used for Training? | Shared? |
+| ---------------- | ------------------ | ------------------ | ------- |
+| Transcript       | ❌ No              | ❌ No              | ❌ No   |
+| Analysis Results | ❌ No              | ❌ No              | ❌ No   |
+| Usage Stats      | ✅ Yes (anonymous) | ❌ No              | ❌ No   |
 
 **In Beta (Current):**
+
 - No authentication required
 - No rate limiting
 - Free for all testers
-- We cover API costs
+- I cover API costs
 
 ### Why Not Fully Local?
 
-**Good question!** We chose a backend API for two reasons:
+**Good question!** I chose a backend API for two reasons:
 
-1. **Keep pattern libraries private** - Our React Native & Next.js pattern knowledge is proprietary
-2. **Continuous improvement** - We can update patterns without you updating the CLI
+1. **Keep pattern libraries private** - The React Native & Next.js pattern knowledge is proprietary
+2. **Continuous improvement** - I can update patterns without you updating the CLI
 
 ---
 
 ## 🤝 Feedback Welcome!
 
-This is a **beta release**. We'd love your honest feedback:
+This is a **beta release**. I'd love your honest feedback:
 
-- ✅ Was the analysis helpful?
-- ✅ Were the action items implementable?
-- ✅ Did the score feel accurate?
+- ✅ Was the session analysis helpful?
+- ✅ Were the quick wins actually implementable?
+- ✅ Did the session quality score feel fair?
+- ✅ Was the disclaimer clear (session vs. codebase)?
 - ✅ Was finding/exporting the transcript annoying?
 - ✅ What's missing?
 - ✅ Would you pay for this?
 
 **Report issues:** [GitHub Issues](https://github.com/daddyj/pairimprover-cli/issues)  
-**General feedback:** Open a discussion or contact us
+**General feedback:** acun@pairimprover.com
 
 ---
 
@@ -192,6 +208,7 @@ This is a **beta release**. We'd love your honest feedback:
 ### Is my code safe?
 
 Yes! Your transcript is:
+
 - Sent over HTTPS (encrypted)
 - Analyzed and immediately deleted
 - Never stored or shared
@@ -199,33 +216,38 @@ Yes! Your transcript is:
 
 ### Why does it need internet?
 
-The analysis runs on our backend to keep our pattern libraries private. We're working on a `--local` mode for offline use.
+The analysis runs on the backend to keep pattern libraries private. A `--local` mode for offline use is planned for the future.
 
 ### What frameworks are supported?
 
 Currently:
+
 - ✅ React Native + Expo (best support)
 - ✅ Next.js (good support)
 - ⏳ More coming (Python, Vue, etc.)
 
-### How accurate is the scoring?
+### How accurate is the session scoring?
 
-Pretty good! We've tested on 100+ real sessions. Scores align with peer reviews ~80% of the time. Still in beta though - give us feedback!
+The score reflects the quality of your AI collaboration in that specific session, not your overall code quality. pAIrImprover analyzes conversation patterns, decision-making, and best practices discussed. Since it doesn't see your full codebase, think of it as "session coaching" rather than "code review."
 
 ---
 
 ## 🛠️ Troubleshooting
 
 ### "npm: command not found"
+
 **Solution:** Install Node.js from https://nodejs.org
 
 ### "Analysis failed" Error
+
 **Possible causes:**
+
 - Backend is temporarily down
 - Internet connection issue
 - File is corrupted or not a valid transcript
 
 **Try:**
+
 ```bash
 # Check if file exists and is readable
 cat your-file.md | head -10
@@ -248,8 +270,9 @@ MIT License - see [LICENSE](LICENSE) file for details.
 Built by [Acun Guersoy](https://github.com/daddyj) - React Native developer passionate about code quality in the AI era.
 
 **Powered by:**
+
 - [Claude AI](https://anthropic.com) for analysis
-- Our proprietary React Native pattern library
+- Proprietary React Native & Next.js pattern libraries
 - Works with transcripts from Cursor, GitHub Copilot, ChatGPT, and more
 
 ---

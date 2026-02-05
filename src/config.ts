@@ -3,10 +3,10 @@
  */
 
 export const config = {
-  // API endpoint - points to your private Vercel backend
+  // API endpoint - points to your private backend
   apiEndpoint:
     process.env.PAIRIMPROVER_API ||
-    "https://pairimprover.vercel.app/api/analyze",
+    "https://pairimprover.com/api/analyze",
 
   // CLI version
   version: "0.1.0",
