@@ -11,7 +11,7 @@ Works best with React Native. Also supports Next.js and other frameworks.
 ## ✨ What You Get
 
 ```bash
-$ npm run analyze -- session.md
+$ pairimprover analyze session.md
 
 📊 Session Quality: 7.8/10 (Good)
 
@@ -28,18 +28,22 @@ $ npm run analyze -- session.md
 
 💡 Quick Wins (based on what was discussed):
 
-1. Add React Native error boundaries in main App component
+1. TDD Red Stage Skipped (8 instances): Tests were written at the same 
+   time as implementation without confirming RED stage first. This is 
+   common with AI pair programming. Write failing test first → Run to 
+   see RED → Implement → Run to see GREEN.
+   ⏱ 5 min  💪 High impact
+
+2. Add React Native error boundaries in main App component
    ⏱ 15 min  💪 High impact
 
-2. Simplify test architecture by separating business logic
-   ⏱ 15 min  💪 High impact
-
-3. Add performance monitoring for FlashList rendering
+3. Simplify test architecture by separating business logic
    ⏱ 15 min  💪 High impact
 ```
 
 **What we analyze (from your session):**
 
+- ✅ **TDD Discipline** - Detects when tests written after implementation (AI pair programming anti-pattern)
 - ✅ Critical thinking patterns in your conversations
 - ✅ Library-first mindset vs. custom solutions
 - ✅ Test discipline (BDD, coverage, edge cases)
@@ -50,23 +54,32 @@ $ npm run analyze -- session.md
 
 ## 🚀 Quick Start
 
-### Installation
+> **👉 First time here?** Follow our [step-by-step setup guide (SETUP.md)](SETUP.md) for detailed instructions and troubleshooting.
+
+### Installation (TL;DR)
 
 ```bash
 # Clone the repo
 git clone https://github.com/daddyj/pairimprover-cli.git
 cd pairimprover-cli
 
-# Install dependencies
+# Install dependencies and link globally
 npm install
+npm link
+
+# Authenticate with GitHub (free tier: 5 analyses/month)
+pairimprover login --github
 
 # Analyze a transcript
-npm run analyze -- ~/path/to/session.md
+pairimprover analyze ~/path/to/session.md
 ```
+
+**Need help?** See [SETUP.md](SETUP.md) for troubleshooting and detailed walkthrough.
 
 ### Requirements
 
 - **Node.js 18+**
+- **GitHub account** (for authentication)
 - **Internet connection** (analysis runs on our backend)
 - **AI coding transcript** (.md or .txt file from Cursor, GitHub Copilot, ChatGPT, or similar)
 
@@ -74,15 +87,33 @@ npm run analyze -- ~/path/to/session.md
 
 ## 📖 Usage
 
+### Authentication
+
+```bash
+# Login with GitHub (recommended)
+pairimprover login --github
+
+# Check your status and usage
+pairimprover status
+
+# Logout
+pairimprover logout
+```
+
+**Free Tier (Public Beta):**
+- 5 analyses per month
+- Full pattern detection
+- All frameworks supported
+
 ### Basic Analysis
 
 ```bash
-npm run analyze -- ./my-session.md
+pairimprover analyze ./my-session.md
 ```
 
 **What happens:**
 
-1. 🔒 Your transcript is sent to our backend API
+1. 🔒 Your transcript is sent to our backend API (authenticated)
 2. 🤖 AI analyzes your patterns (20-60 seconds)
 3. 📊 You get results in your terminal
 4. 🗑️ Transcript is immediately deleted (not stored)
@@ -90,11 +121,8 @@ npm run analyze -- ./my-session.md
 ### Options
 
 ```bash
-# Open web dashboard after analysis (coming soon)
-npm run analyze -- session.md --open
-
 # Override framework detection
-npm run analyze -- session.md --framework react-native
+pairimprover analyze session.md --framework react-native
 ```
 
 ---
@@ -162,15 +190,15 @@ Your Machine              Our Backend (Private)
 | ---------------- | ------------------ | ------------------ | ------- |
 | Transcript       | ❌ No              | ❌ No              | ❌ No   |
 | Analysis Results | ❌ No              | ❌ No              | ❌ No   |
-| Usage Stats      | ✅ Yes (anonymous) | ❌ No              | ❌ No   |
+| GitHub Username  | ✅ Yes (for auth)  | ❌ No              | ❌ No   |
+| Usage Stats      | ✅ Yes (per user)  | ❌ No              | ❌ No   |
 
-**In Beta (Current):**
+**Public Beta (Current):**
 
-- No authentication required
-- No rate limiting  
-- Free during beta period (Feb-Mar 2026)
-- I cover API costs
-- Beta testers: 6-12 months Pro free after launch (based on contribution level)
+- GitHub authentication required
+- Free tier: 5 analyses/month
+- Pro tier: Unlimited analyses (pricing TBD)
+- Your authentication token stored locally at `~/.pairimprover/config.json` (with 600 permissions)
 
 ### Why Not Fully Local?
 
@@ -185,6 +213,7 @@ Your Machine              Our Backend (Private)
 
 This is a **beta release**. I'd love your honest feedback:
 
+- ✅ **Which AI IDE are you using?** (Cursor, Copilot, Antigravity, Windsurf, ChatGPT, etc.)
 - ✅ Was the session analysis helpful?
 - ✅ Were the quick wins actually implementable?
 - ✅ Did the session quality score feel fair?
@@ -202,11 +231,18 @@ This is a **beta release**. I'd love your honest feedback:
 
 ### What AI tools are supported?
 
-- ✅ Cursor
-- ✅ GitHub Copilot
-- ✅ ChatGPT
-- ✅ Claude
-- ✅ Any AI coding tool that exports conversation transcripts
+**Tested & Verified:**
+- ✅ **Cursor** - Markdown export (fully tested)
+- ✅ **GitHub Copilot** - JSON export via `Chat: Export Session...`
+- ✅ **ChatGPT** - JSON/Markdown export via browser extensions
+
+**Should Work (Text-based):**
+- 🟡 **Claude.ai** - Copy/paste conversations
+- 🟡 **Google Antigravity** - If transcript export becomes available
+- 🟡 **Windsurf (Codeium)** - If chat export is added
+- 🟡 **Any tool** that exports plain text conversations
+
+**Note:** As long as your AI tool can export the conversation as text (Markdown, JSON, or plain text), pAIrImprover can analyze it. We're actively collecting examples from beta testers to expand verified support.
 
 ### Is my code safe?
 
@@ -219,7 +255,7 @@ Yes! Your transcript is:
 
 ### Why does it need internet?
 
-The analysis runs on the backend to keep pattern libraries private. A `--local` mode for offline use is planned for the future.
+The analysis runs on the backend to keep pattern libraries private.
 
 ### What frameworks are supported?
 

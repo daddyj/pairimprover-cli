@@ -4,12 +4,15 @@
 
 This guide will get you up and running in 5 minutes.
 
+> **📖 New here?** Read the [README](README.md) first for an overview of what pAIrImprover does. Then come back here for installation steps.
+
 ---
 
 ## 📋 Prerequisites
 
 - **Node.js 18+** (Check: `node --version`)
 - **npm** (Comes with Node.js)
+- **GitHub account** (for authentication)
 - **Internet connection**
 - **An AI coding transcript** (.md or .txt from Cursor, Copilot, ChatGPT, etc.)
 
@@ -24,17 +27,44 @@ git clone https://github.com/daddyj/pairimprover-cli.git
 cd pairimprover-cli
 ```
 
-### Step 2: Install Dependencies
+### Step 2: Install Dependencies & Link Globally
 
 ```bash
 npm install
+npm link
 ```
 
-That's it! No API keys needed. No configuration files.
+**What `npm link` does:** Creates a global symlink so you can use `pairimprover` command from anywhere in your terminal.
+
+### Step 3: Authenticate with GitHub
+
+```bash
+pairimprover login --github
+```
+
+**What happens:**
+1. Opens your browser to GitHub OAuth
+2. You authorize the app
+3. Copy the JWT token from the success page
+4. Paste it into the CLI prompt
+5. Done! Your token is saved locally at `~/.pairimprover/config.json`
+
+**Free tier:** 5 analyses per month
 
 ---
 
 ## 🧪 Test It
+
+### Check Authentication Status
+
+```bash
+pairimprover status
+```
+
+You should see:
+- ✅ Your GitHub username
+- ✅ Tier: public-beta
+- ✅ Usage: 0/5 this month (5 remaining)
 
 ### Quick Test
 
@@ -43,7 +73,7 @@ That's it! No API keys needed. No configuration files.
 echo "I built a React Native app with FlatList" > test.md
 
 # Analyze it
-npm run analyze -- test.md
+pairimprover analyze test.md
 ```
 
 You should see:
@@ -56,7 +86,7 @@ You should see:
 
 ```bash
 # Export a chat from your AI tool first, then:
-npm run analyze -- ~/path/to/your-session.md
+pairimprover analyze ~/path/to/your-session.md
 ```
 
 **What to expect:**
@@ -64,6 +94,7 @@ npm run analyze -- ~/path/to/your-session.md
 - Takes 20-60 seconds (depending on size)
 - Shows progress spinner
 - Displays results in terminal
+- Usage counter increments
 
 ---
 
@@ -72,19 +103,26 @@ npm run analyze -- ~/path/to/your-session.md
 ### Basic Analysis
 
 ```bash
-npm run analyze -- session.md
+pairimprover analyze session.md
 ```
 
-### Open Web Dashboard (Coming Soon)
+### Check Your Usage
 
 ```bash
-npm run analyze -- session.md --open
+pairimprover status
+```
+
+### Logout & Login Again
+
+```bash
+pairimprover logout
+pairimprover login --github
 ```
 
 ### Override Framework Detection
 
 ```bash
-npm run analyze -- session.md --framework react-native
+pairimprover analyze session.md --framework react-native
 ```
 
 ---
@@ -110,9 +148,42 @@ npm run analyze -- session.md --framework react-native
 
 ## 🐛 Troubleshooting
 
+### "command not found: pairimprover"
+
+**Solution:** Run `npm link` in the CLI directory
+
+```bash
+cd pairimprover-cli
+npm link
+```
+
 ### "npm: command not found"
 
 **Solution:** Install Node.js from https://nodejs.org
+
+### "Authentication Required" Error
+
+**Possible causes:**
+
+- Not logged in yet
+- Token expired (30 days)
+- Token file corrupted
+
+**Solution:**
+
+```bash
+# Login again
+pairimprover login --github
+```
+
+### "Monthly Limit Reached" Error
+
+**Solution:**
+
+You've used all 5 analyses for this month. Options:
+
+1. Wait until next month (free tier resets)
+2. Contact acun@pairimprover.com for beta access options
 
 ### "Analysis failed" Error
 
@@ -125,12 +196,16 @@ npm run analyze -- session.md --framework react-native
 **Try:**
 
 ```bash
+# Check your authentication
+pairimprover status
+
 # Check internet connection
-curl https://pairimprover.vercel.app/api/analyze
-# Should return a 400 error (expected - means API is up)
+curl https://www.pairimprover.com/api/auth/verify
+# Should return an error about authorization (expected)
 
 # Try a smaller file first
-npm run analyze -- test.md
+echo "test" > test.md
+pairimprover analyze test.md
 ```
 
 ### "Cannot find module" Errors
@@ -141,17 +216,18 @@ npm run analyze -- test.md
 # Reinstall dependencies
 rm -rf node_modules package-lock.json
 npm install
+npm link
 ```
 
 ### File Path Issues
 
 ```bash
 # Use full path if relative doesn't work:
-npm run analyze -- /Users/yourname/Desktop/session.md
+pairimprover analyze /Users/yourname/Desktop/session.md
 
 # Or navigate to the file first:
 cd ~/Desktop
-npm run analyze -- session.md
+pairimprover analyze session.md
 ```
 
 ---
@@ -165,7 +241,7 @@ After testing, please share:
 1. **Did it work?** (Y/N)
 2. **Was the analysis helpful?** (1-5 scale)
 3. **Did you implement any suggestions?** (Y/N)
-4. **Would you pay $29/month for this?** (Y/N/Maybe)
+4. **Would you pay for unlimited analyses?** (Y/N/Maybe - any price point?)
 5. **What's the #1 thing that would make it more valuable?** (open)
 
 **Send to:** acun@pairimprover.com
@@ -178,19 +254,9 @@ Want to do a quick call? I'd love to hear your thoughts in detail!
 
 ## 🎁 Thank You!
 
-Your feedback is invaluable. You're helping me shape a tool that will improve code quality for thousands of developers.
+Your feedback is invaluable. You're helping shape a tool that improves code quality for developers working with AI.
 
-**As a thank you:**
-
-- 🎟️ **6 months Pro free** after launch (then $29/month)
-- 🏆 Listed as founding beta tester (if you want)
-- ☕ Virtual coffee chat with me anytime
-
-**For active beta contributors** (5+ quality feedback sessions):
-
-- Additional 6 months free (12 months total)
-- Early access to new features
-- Input on roadmap priorities
+**Beta tester benefits will be communicated personally** - reach out to discuss!
 
 ---
 
