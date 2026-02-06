@@ -24,11 +24,11 @@ program
   .command('login [access-code]')
   .description('Login with GitHub or beta access code')
   .option('--github', 'Login with GitHub OAuth')
-  .action((accessCode: string | undefined, options: { github?: boolean }) => {
+  .action(async (accessCode: string | undefined, options: { github?: boolean }) => {
     if (options.github) {
-      loginWithGitHub();
+      await loginWithGitHub();
     } else if (accessCode) {
-      loginWithAccessCode(accessCode);
+      await loginWithAccessCode(accessCode);
     } else {
       console.log(chalk.yellow('Please provide an access code or use --github flag'));
       console.log('');
@@ -50,8 +50,8 @@ program
 program
   .command('status')
   .description('Show authentication status and usage')
-  .action(() => {
-    showStatus();
+  .action(async () => {
+    await showStatus();
   });
 
 // Add analyze command

@@ -7,7 +7,7 @@ import chalk from 'chalk';
 import ora from 'ora';
 import open from 'open';
 import { config } from '../config.js';
-import { saveAuthToken, saveUserInfo, clearConfig, getUserInfo } from '../auth-config.js';
+import { saveAuthToken, getAuthToken, saveUserInfo, clearConfig, getUserInfo } from '../auth-config.js';
 import * as readline from 'readline';
 
 export interface AuthResponse {
@@ -208,25 +208,70 @@ export function logout(): void {
 }
 
 /**
- * Show current auth status
+ * Show current auth status (fetches fresh data from backend)
  */
-export function showStatus(): void {
-  const userInfo = getUserInfo();
+export async function showStatus(): Promise<void> {
+  const token = getAuthToken();
 
-  if (!userInfo) {
+  if (!token) {
     console.log(chalk.yellow('Not logged in'));
-    console.log(chalk.dim('\nRun `pairimprover login <access-code>` to authenticate'));
+    console.log(chalk.dim('\nRun `pairimprover login <access-code>` or `pairimprover login --github` to authenticate'));
     return;
   }
 
-  console.log(chalk.green('✓ Authenticated'));
-  console.log(chalk.dim(`\nUser: ${userInfo.github_username}`));
-  console.log(chalk.dim(`Tier: ${userInfo.tier}`));
-  
-  if (userInfo.monthly_limit === null) {
-    console.log(chalk.dim('Usage: Unlimited analyses'));
-  } else if (userInfo.monthly_limit > 0) {
-    const remaining = Math.max(0, userInfo.monthly_limit - userInfo.analyses_count);
-    console.log(chalk.dim(`Usage: ${userInfo.analyses_count}/${userInfo.monthly_limit} this month (${remaining} remaining)`));
+  // Fetch fresh usage data from backend
+  try {
+    const response = await fetch(`${config.urls.website}/api/auth/verify`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    const data = await response.json() as VerifyResponse;
+
+    if (!response.ok || !data.success) {
+      console.log(chalk.yellow('Token expired or invalid'));
+      console.log(chalk.dim('\nPlease login again'));
+      return;
+    }
+
+    // Update local cache with fresh data
+    saveUserInfo({
+      id: data.user.id,
+      github_username: data.user.github_username,
+      tier: data.user.tier,
+      analyses_count: data.usage.thisMonth,
+      monthly_limit: data.usage.limit,
+    });
+
+    console.log(chalk.green('✓ Authenticated'));
+    console.log(chalk.dim(`\nUser: ${data.user.github_username}`));
+    console.log(chalk.dim(`Tier: ${data.user.tier}`));
+
+    if (data.usage.unlimited) {
+      console.log(chalk.dim('Usage: Unlimited analyses'));
+    } else {
+      const remaining = data.usage.remaining || 0;
+      console.log(chalk.dim(`Usage: ${data.usage.thisMonth}/${data.usage.limit} this month (${remaining} remaining)`));
+    }
+  } catch (error) {
+    console.log(chalk.red('Failed to fetch status'));
+    console.log(chalk.dim('Showing cached data:\n'));
+    
+    // Fallback to cached data
+    const userInfo = getUserInfo();
+    if (userInfo) {
+      console.log(chalk.green('✓ Authenticated (offline)'));
+      console.log(chalk.dim(`\nUser: ${userInfo.github_username}`));
+      console.log(chalk.dim(`Tier: ${userInfo.tier}`));
+      
+      if (userInfo.monthly_limit === null) {
+        console.log(chalk.dim('Usage: Unlimited analyses'));
+      } else if (userInfo.monthly_limit > 0) {
+        const remaining = Math.max(0, userInfo.monthly_limit - userInfo.analyses_count);
+        console.log(chalk.dim(`Usage: ${userInfo.analyses_count}/${userInfo.monthly_limit} this month (${remaining} remaining)`));
+      }
+    }
   }
 }
