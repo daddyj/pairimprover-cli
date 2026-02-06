@@ -5,8 +5,10 @@
 
 import chalk from 'chalk';
 import ora from 'ora';
+import open from 'open';
 import { config } from '../config.js';
 import { saveAuthToken, saveUserInfo, clearConfig, getUserInfo } from '../auth-config.js';
+import * as readline from 'readline';
 
 export interface AuthResponse {
   success: boolean;
@@ -20,6 +22,119 @@ export interface AuthResponse {
   };
   token?: string;
   error?: string;
+}
+
+export interface VerifyResponse {
+  success: boolean;
+  user: {
+    id: string;
+    github_username: string;
+    tier: 'public-beta' | 'invited-beta' | 'free' | 'pro' | 'expert';
+    email: string | null;
+    avatar_url: string | null;
+    invited_beta_tester: boolean;
+    analyses_count: number;
+  };
+  usage: {
+    thisMonth: number;
+    limit: number;
+    unlimited: boolean;
+    remaining: number | null;
+  };
+  error?: string;
+}
+
+/**
+ * Prompt user for input
+ */
+function prompt(question: string): Promise<string> {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+  return new Promise((resolve) => {
+    rl.question(question, (answer) => {
+      rl.close();
+      resolve(answer.trim());
+    });
+  });
+}
+
+/**
+ * Login with GitHub OAuth (for public beta)
+ */
+export async function loginWithGitHub(): Promise<void> {
+  console.log(chalk.bold.cyan('🔐 GitHub Authentication'));
+  console.log('');
+  console.log(chalk.dim('Opening browser for GitHub OAuth...'));
+  console.log('');
+
+  const authUrl = `${config.urls.website}/api/auth/github/start`;
+
+  try {
+    // Open browser
+    await open(authUrl);
+    console.log(chalk.green('✓ Browser opened'));
+    console.log('');
+    console.log(chalk.dim('After authorizing on GitHub:'));
+    console.log(chalk.dim('1. Copy the token from the success page'));
+    console.log(chalk.dim('2. Paste it below'));
+    console.log('');
+
+    // Prompt for token
+    const token = await prompt(chalk.cyan('Paste your token: '));
+
+    if (!token || token.length === 0) {
+      console.log(chalk.yellow('No token provided. Authentication cancelled.'));
+      process.exit(1);
+    }
+
+    // Verify token with backend
+    const spinner = ora('Verifying token...').start();
+
+    const response = await fetch(`${config.urls.website}/api/auth/verify`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    const data = await response.json() as VerifyResponse;
+
+    if (!response.ok || !data.success) {
+      spinner.fail(chalk.red('Invalid token'));
+      console.log(chalk.yellow('\n' + (data.error || 'Token verification failed')));
+      console.log(chalk.dim('\nPlease try again or contact: acun@pairimprover.com'));
+      process.exit(1);
+    }
+
+    // Save token and user info
+    saveAuthToken(token);
+    saveUserInfo({
+      id: data.user.id,
+      github_username: data.user.github_username,
+      tier: data.user.tier,
+      analyses_count: data.usage.thisMonth,
+      monthly_limit: data.usage.limit,
+    });
+
+    spinner.succeed(chalk.green('Authentication successful!'));
+    console.log(chalk.dim(`\nWelcome, ${data.user.github_username}!`));
+    console.log(chalk.dim(`Tier: ${data.user.tier}`));
+    
+    if (data.usage.unlimited) {
+      console.log(chalk.dim('Usage: Unlimited analyses'));
+    } else {
+      const remaining = data.usage.remaining || 0;
+      console.log(chalk.dim(`Usage: ${data.usage.thisMonth}/${data.usage.limit} this month (${remaining} remaining)`));
+    }
+  } catch (error) {
+    console.log(chalk.red('\n✗ Authentication failed'));
+    console.log(chalk.yellow('\n' + (error instanceof Error ? error.message : 'Unknown error')));
+    console.log(chalk.dim('\nPlease check your internet connection and try again.'));
+    process.exit(1);
+  }
 }
 
 /**
