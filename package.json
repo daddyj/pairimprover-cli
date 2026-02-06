@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "tsx src/index.ts",
     "build": "tsc",
+    "prepare": "npm run build",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
     "analyze": "tsx src/index.ts analyze"
   },
