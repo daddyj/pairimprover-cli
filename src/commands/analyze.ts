@@ -8,9 +8,10 @@ import path from 'path';
 import chalk from 'chalk';
 import ora from 'ora';
 import open from 'open';
-import { analyzeTranscript } from '../api-client.js';
+import { analyzeTranscript, AuthenticationError, RateLimitError } from '../api-client.js';
 import { formatResults, formatMetadata } from '../formatter.js';
 import { config } from '../config.js';
+import { getUserInfo } from '../auth-config.js';
 
 export const analyzeCommand = new Command('analyze')
   .description('Analyze an AI coding session transcript')
@@ -76,6 +77,44 @@ export const analyzeCommand = new Command('analyze')
     } catch (error) {
       analyzeSpinner.fail(chalk.red('Analysis failed'));
       console.error('');
+
+      // Handle authentication errors
+      if (error instanceof AuthenticationError) {
+        console.error(chalk.red('🔒 Authentication Required'));
+        console.error('');
+        console.error(chalk.yellow(error.message));
+        console.error('');
+        console.error(chalk.dim('Run: ') + chalk.cyan('pairimprover login <access-code>'));
+        console.error('');
+        console.error(chalk.dim('Need an access code? Contact: acun@pairimprover.com'));
+        console.error('');
+        process.exit(1);
+      }
+
+      // Handle rate limit errors
+      if (error instanceof RateLimitError) {
+        const userInfo = getUserInfo();
+        console.error(chalk.yellow('📊 Monthly Limit Reached'));
+        console.error('');
+        console.error(chalk.yellow(error.message));
+        console.error('');
+        
+        if (userInfo) {
+          console.error(chalk.dim(`Current tier: ${userInfo.tier}`));
+          console.error(chalk.dim(`Analyses this month: ${userInfo.analyses_count}/${userInfo.monthly_limit}`));
+          console.error('');
+        }
+        
+        console.error(chalk.dim('Options:'));
+        console.error(chalk.dim('  • Wait until next month for limit reset'));
+        console.error(chalk.dim('  • Upgrade to Pro for unlimited analyses'));
+        console.error('');
+        console.error(chalk.cyan(`View pricing: ${error.upgradeUrl}`));
+        console.error('');
+        process.exit(1);
+      }
+
+      // Handle other errors
       console.error(chalk.red('Error: ') + (error instanceof Error ? error.message : 'Unknown error'));
       console.error('');
       console.error(chalk.gray('Possible issues:'));

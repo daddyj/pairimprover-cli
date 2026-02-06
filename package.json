@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "tsx src/index.ts",
     "build": "tsc",
-    "test": "echo \"No tests yet\"",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
     "analyze": "tsx src/index.ts analyze"
   },
   "keywords": [
@@ -34,11 +34,14 @@
   "dependencies": {
     "chalk": "^5.6.2",
     "commander": "^14.0.3",
-    "ora": "^9.3.0",
-    "open": "^11.0.0"
+    "open": "^11.0.0",
+    "ora": "^9.3.0"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "@types/node": "^20.0.0",
+    "jest": "^30.2.0",
+    "ts-jest": "^29.4.6",
     "tsx": "^4.21.0",
     "typescript": "^5.0.0"
   },

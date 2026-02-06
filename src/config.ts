@@ -6,7 +6,7 @@ export const config = {
   // API endpoint - points to your private backend
   apiEndpoint:
     process.env.PAIRIMPROVER_API ||
-    "https://pairimprover.com/api/analyze",
+    "https://www.pairimprover.com/api/analyze",
 
   // CLI version
   version: "0.1.0",
@@ -18,8 +18,8 @@ export const config = {
 
   // URLs
   urls: {
-    website: "https://pairimprover.com",
-    pricing: "https://pairimprover.com/pricing",
+    website: "https://www.pairimprover.com",
+    pricing: "https://www.pairimprover.com/pricing",
     docs: "https://github.com/daddyj/pairimprover-cli",
   },
 };

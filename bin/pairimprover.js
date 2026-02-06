@@ -2,23 +2,18 @@
 
 /**
  * CLI wrapper for pAIrImprover
- * Executes the TypeScript CLI using tsx in development
+ * Executes the compiled JavaScript
  */
 
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import { spawn } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const cliPath = join(__dirname, '..', 'src', 'index.ts');
+const cliPath = join(__dirname, '..', 'dist', 'index.js');
 
-// Run with tsx for development, will use compiled version after build
-const child = spawn('npx', ['tsx', cliPath, ...process.argv.slice(2)], {
-  stdio: 'inherit',
-  shell: true,
-});
-
-child.on('exit', (code) => {
-  process.exit(code || 0);
+// Import and run the compiled CLI
+import(cliPath).catch((error) => {
+  console.error('Failed to load CLI:', error);
+  process.exit(1);
 });

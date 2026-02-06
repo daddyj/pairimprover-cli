@@ -4,6 +4,8 @@
 
 Analyze your AI coding sessions and get actionable feedback on patterns, testing discipline, and architecture decisions.
 
+Works best with React Native. Also supports Next.js and other frameworks.
+
 ---
 
 ## ✨ What You Get
@@ -42,7 +44,7 @@ $ npm run analyze -- session.md
 - ✅ Library-first mindset vs. custom solutions
 - ✅ Test discipline (BDD, coverage, edge cases)
 - ✅ Architectural decisions and trade-offs
-- ✅ Framework best practices (React Native, Next.js, etc.)
+- ✅ React Native best practices (Next.js also supported)
 
 ---
 
@@ -165,9 +167,10 @@ Your Machine              Our Backend (Private)
 **In Beta (Current):**
 
 - No authentication required
-- No rate limiting
-- Free for all testers
+- No rate limiting  
+- Free during beta period (Feb-Mar 2026)
 - I cover API costs
+- Beta testers: 6-12 months Pro free after launch (based on contribution level)
 
 ### Why Not Fully Local?
 
@@ -220,11 +223,9 @@ The analysis runs on the backend to keep pattern libraries private. A `--local` 
 
 ### What frameworks are supported?
 
-Currently:
-
-- ✅ React Native + Expo (best support)
-- ✅ Next.js (good support)
-- ⏳ More coming (Python, Vue, etc.)
+- ✅ React Native + Expo (deep pattern library, best results)
+- ✅ Next.js (good pattern coverage)
+- ⏳ Other frameworks (generic analysis available, improving based on demand)
 
 ### How accurate is the session scoring?
 
@@ -272,7 +273,8 @@ Built by [Acun Guersoy](https://github.com/daddyj) - React Native developer pass
 **Powered by:**
 
 - [Claude AI](https://anthropic.com) for analysis
-- Proprietary React Native & Next.js pattern libraries
+- Proprietary React Native pattern library (40+ patterns)
+- Next.js patterns included
 - Works with transcripts from Cursor, GitHub Copilot, ChatGPT, and more
 
 ---

@@ -182,9 +182,15 @@ Your feedback is invaluable. You're helping me shape a tool that will improve co
 
 **As a thank you:**
 
-- 🎟️ Free Pro tier for life (when I launch it)
-- 🏆 Listed as beta tester (if you want)
-- ☕ Virtual coffee chat with me
+- 🎟️ **6 months Pro free** after launch (then $29/month)
+- 🏆 Listed as founding beta tester (if you want)
+- ☕ Virtual coffee chat with me anytime
+
+**For active beta contributors** (5+ quality feedback sessions):
+
+- Additional 6 months free (12 months total)
+- Early access to new features
+- Input on roadmap priorities
 
 ---
 
@@ -194,7 +200,24 @@ Your feedback is invaluable. You're helping me shape a tool that will improve co
 
 - GitHub Issues: https://github.com/daddyj/pairimprover-cli/issues
 - Email: acun@pairimprover.com
-- LinkedIn: www.linkedin.com/in/acun-guersoy
+- LinkedIn: https://www.linkedin.com/in/acun-guersoy
+
+---
+
+## 💡 Help Improve Pattern Detection (Optional)
+
+After using the tool a few times, you might notice patterns we're missing or detect incorrectly. If you'd like to contribute:
+
+**Share anonymized sessions:**
+
+- Code snippets removed
+- Project names removed
+- Only conversation patterns used
+- Helps improve detection for everyone
+
+**Reward:** Additional 3 months Pro per accepted pattern contribution
+
+Want to contribute? Email me and we'll chat about it.
 
 ---
 
