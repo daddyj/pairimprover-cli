@@ -54,13 +54,13 @@ export function formatResults(response: AnalyzeResponse): string {
   // Footer with upgrade CTA
   lines.push(chalk.bold('━'.repeat(60)));
   lines.push(chalk.bold.magenta('💎 Want to track your improvement over time?'));
-  lines.push(chalk.gray('   Upgrade to Pro: $29/month'));
+  lines.push(chalk.gray('   Upgrade for:'));
   lines.push(chalk.gray('   • Unlimited analyses'));
   lines.push(chalk.gray('   • 5-10 actions per session'));
   lines.push(chalk.gray('   • Historical tracking'));
   lines.push(chalk.gray('   • Pattern recognition'));
   lines.push('');
-  lines.push(chalk.gray('   Visit: https://pairimprover.com/pricing'));
+  lines.push(chalk.gray('   Contact: acun@pairimprover.com'));
   lines.push(chalk.bold('━'.repeat(60)));
   lines.push('');
 
