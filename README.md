@@ -4,7 +4,7 @@
 
 Analyze your AI coding sessions and get actionable feedback on patterns, testing discipline, and architecture decisions.
 
-Works best with React Native. Also supports Next.js and other frameworks.
+Works best with React Native. Also supports Next.js.
 
 ---
 
