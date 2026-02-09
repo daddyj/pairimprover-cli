@@ -82,6 +82,13 @@ export class RateLimitError extends Error {
   }
 }
 
+export class InvalidTranscriptError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'InvalidTranscriptError';
+  }
+}
+
 /**
  * Analyze a transcript via the pAIrImprover API
  */
@@ -128,6 +135,27 @@ export async function analyzeTranscript(
   // Handle other errors
   if (!response.ok) {
     throw new Error(data.error || `API request failed: ${response.statusText}`);
+  }
+
+  // Validate response has required fields
+  if (!data.success || !data.analysis) {
+    throw new InvalidTranscriptError(
+      data.error || 'Invalid analysis response from server'
+    );
+  }
+
+  // Check if transcript was too short/invalid (null overallScore indicates incomplete analysis)
+  if (data.analysis.overallScore === null || data.analysis.overallScore === undefined) {
+    const lineCount = data.analysis.metadata?.lineCount || 0;
+    if (lineCount < 10) {
+      throw new InvalidTranscriptError(
+        `Transcript too short (${lineCount} lines). Please provide a longer AI coding session transcript (at least 50-100 lines).`
+      );
+    } else {
+      throw new InvalidTranscriptError(
+        'Transcript format not recognized. Please ensure this is an AI coding session transcript (Cursor, GitHub Copilot, ChatGPT, etc.).'
+      );
+    }
   }
 
   return data;

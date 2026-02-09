@@ -8,7 +8,7 @@ import path from 'path';
 import chalk from 'chalk';
 import ora from 'ora';
 import open from 'open';
-import { analyzeTranscript, AuthenticationError, RateLimitError } from '../api-client.js';
+import { analyzeTranscript, AuthenticationError, RateLimitError, InvalidTranscriptError } from '../api-client.js';
 import { formatResults, formatMetadata } from '../formatter.js';
 import { config } from '../config.js';
 import { getUserInfo } from '../auth-config.js';
@@ -110,6 +110,23 @@ export const analyzeCommand = new Command('analyze')
         console.error(chalk.dim('  • Upgrade to Pro for unlimited analyses'));
         console.error('');
         console.error(chalk.cyan(`View pricing: ${error.upgradeUrl}`));
+        console.error('');
+        process.exit(1);
+      }
+
+      // Handle invalid transcript errors
+      if (error instanceof InvalidTranscriptError) {
+        console.error(chalk.yellow('⚠️  Invalid Transcript'));
+        console.error('');
+        console.error(chalk.yellow(error.message));
+        console.error('');
+        console.error(chalk.dim('What makes a valid transcript:'));
+        console.error(chalk.dim('  • AI coding session export (Cursor, Copilot, ChatGPT, etc.)'));
+        console.error(chalk.dim('  • Contains conversation between you and AI'));
+        console.error(chalk.dim('  • Includes code snippets or technical discussion'));
+        console.error(chalk.dim('  • At least 50-100 lines of content'));
+        console.error('');
+        console.error(chalk.dim('Need help? Contact: acun@pairimprover.com'));
         console.error('');
         process.exit(1);
       }

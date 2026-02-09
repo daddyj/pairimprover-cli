@@ -11,10 +11,16 @@ export function formatResults(response: AnalyzeResponse): string {
   const { analysis } = response;
   const lines: string[] = [];
 
-  // Header
+  // Header - Handle null/undefined overallScore
   lines.push('');
   lines.push(chalk.bold('━'.repeat(60)));
-  lines.push(chalk.bold(`📊 Session Quality: ${analysis.overallScore.toFixed(1)}/10 (${getGrade(analysis.overallScore)})`));
+  
+  if (analysis.overallScore !== null && analysis.overallScore !== undefined) {
+    lines.push(chalk.bold(`📊 Session Quality: ${analysis.overallScore.toFixed(1)}/10 (${getGrade(analysis.overallScore)})`));
+  } else {
+    lines.push(chalk.bold(`📊 Session Quality: Unable to score (transcript may be too short or invalid)`));
+  }
+  
   lines.push(chalk.bold('━'.repeat(60)));
   lines.push('');
   
@@ -91,7 +97,10 @@ export function formatMetadata(response: AnalyzeResponse): string {
   const lines: string[] = [];
 
   lines.push(chalk.gray(`✓ Parsed: ${analysis.metadata.lineCount.toLocaleString()} lines`));
-  lines.push(chalk.gray(`✓ Framework: ${analysis.metadata.framework} (${Math.round(analysis.metadata.frameworkDetectionConfidence * 100)}% confidence)`));
+  
+  // Handle null/undefined confidence
+  const confidence = analysis.metadata.frameworkDetectionConfidence ?? 0;
+  lines.push(chalk.gray(`✓ Framework: ${analysis.metadata.framework} (${Math.round(confidence * 100)}% confidence)`));
   
   return lines.join('\n');
 }
