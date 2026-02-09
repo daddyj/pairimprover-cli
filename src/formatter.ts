@@ -45,8 +45,19 @@ export function formatResults(response: AnalyzeResponse): string {
     lines.push(chalk.bold.cyan('💡 Quick Wins (based on what was discussed):'));
     lines.push('');
     analysis.actionItems.slice(0, 3).forEach((action, index) => {
-      lines.push(chalk.cyan(`${index + 1}. ${action}`));
+      lines.push(chalk.cyan(`${index + 1}. ${action.title}`));
       lines.push(chalk.gray(`   ⏱  15 minutes  💪 Impact: High  🎯 ${analysis.metadata.framework}`));
+      
+      // Show prompt snippet if available (A/B testing feature)
+      if (action.promptSnippet) {
+        lines.push('');
+        lines.push(chalk.dim('   💬 Ask your AI next time:'));
+        // Indent each line of the prompt snippet
+        const snippetLines = action.promptSnippet.split('\n');
+        snippetLines.forEach(line => {
+          lines.push(chalk.dim(`   ${line}`));
+        });
+      }
     });
     lines.push('');
   }

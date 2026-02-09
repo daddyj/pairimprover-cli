@@ -36,7 +36,10 @@ export interface AnalyzeResponse {
       severity: string;
       pillar: string;
     }>;
-    actionItems: string[];
+    actionItems: Array<{
+      title: string;
+      promptSnippet?: string;
+    }>;
     metadata: {
       lineCount: number;
       framework: string;
