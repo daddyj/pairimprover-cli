@@ -28,27 +28,20 @@ $ pairimprover analyze session.md
 
 💡 Quick Wins (based on what was discussed):
 
-1. TDD Red Stage Skipped (8 instances): Tests were written at the same 
-   time as implementation without confirming RED stage first. This is 
-   common with AI pair programming. Write failing test first → Run to 
-   see RED → Implement → Run to see GREEN.
+1. Example: tighten test discipline before the next feature
    ⏱ 5 min  💪 High impact
 
-2. Add React Native error boundaries in main App component
+2. Example: harden UI for failure modes (e.g. errors, empty states)
    ⏱ 15 min  💪 High impact
 
-3. Simplify test architecture by separating business logic
+3. Example: simplify structure where it reduces future change cost
    ⏱ 15 min  💪 High impact
 ```
 
 **What we analyze (from your session):**
 
-- ✅ **TDD Discipline** - Detects when tests written after implementation (AI pair programming anti-pattern)
-- ✅ Critical thinking patterns in your conversations
-- ✅ Library-first mindset vs. custom solutions
-- ✅ Test discipline (BDD, coverage, edge cases)
-- ✅ Architectural decisions and trade-offs
-- ✅ React Native best practices (Next.js also supported)
+- Collaboration quality, testing discipline, and architectural choices discussed in the transcript
+- Framework-aware feedback (strongest for React Native / Expo; Next.js supported)
 
 ---
 
@@ -189,20 +182,12 @@ pairimprover analyze session.md --framework react-native
 ### Architecture
 
 ```
-Your Machine              Our Backend (Private)
-────────────              ─────────────────────
+Your Machine              Our Backend
+────────────              ────────────
 
-1. CLI reads file
-   [session.md]
-
-2. POST to API        ──→  3. Parse transcript
-   (via HTTPS)             4. Detect framework
-                           5. Apply pattern library
-3. Wait for result         6. AI analysis (Claude)
-                           7. Generate insights
-
-4. Display results   ←───  8. Return JSON
-                           9. Delete transcript
+1. CLI reads transcript
+2. POST over HTTPS   ──→  Parse, analyze, return results
+3. Show output       ←──  Transcript deleted after processing
 ```
 
 ### Privacy Guarantees
@@ -223,10 +208,7 @@ Your Machine              Our Backend (Private)
 
 ### Why Not Fully Local?
 
-**Good question!** I chose a backend API for two reasons:
-
-1. **Keep pattern libraries private** - The React Native & Next.js pattern knowledge is proprietary
-2. **Continuous improvement** - I can update patterns without you updating the CLI
+Analysis runs on pAIrImprover’s servers so the product can improve continuously without you reinstalling the CLI, and so sensitive scoring logic stays server-side.
 
 ---
 
@@ -244,7 +226,7 @@ This is a **beta release**. I'd love your honest feedback:
 - ✅ Would you pay for this?
 
 **Report issues:** [GitHub Issues](https://github.com/daddyj/pairimprover-cli/issues)  
-**General feedback:** acun@pairimprover.com
+**General feedback:** hello@pairimprover.com
 
 ---
 
@@ -276,7 +258,7 @@ Yes! Your transcript is:
 
 ### Why does it need internet?
 
-The analysis runs on the backend to keep pattern libraries private.
+Session analysis runs on pAIrImprover’s backend over HTTPS.
 
 ### What frameworks are supported?
 
@@ -329,10 +311,8 @@ Built by [Acun Guersoy](https://github.com/daddyj) - React Native developer pass
 
 **Powered by:**
 
-- [Claude AI](https://anthropic.com) for analysis
-- Proprietary React Native pattern library (40+ patterns)
-- Next.js patterns included
-- Works with transcripts from Cursor, GitHub Copilot, ChatGPT, and more
+- [Claude](https://anthropic.com) (analysis)
+- Works with transcripts from Cursor, GitHub Copilot, ChatGPT, and similar tools
 
 ---
 
