@@ -58,6 +58,16 @@ $ pairimprover analyze session.md
 
 ### Installation (TL;DR)
 
+**Recommended for MCP users (no clone):** sign in from any terminal — tokens are stored in `~/.pairimprover/config.json`, not in AI chat:
+
+```bash
+npx -y pairimprover-cli login --github
+```
+
+Then use the same machine with the [pAIrImprover MCP server](https://www.pairimprover.com/setup) in your IDE.
+
+**From source / global CLI:**
+
 ```bash
 # Clone the repo
 git clone https://github.com/daddyj/pairimprover-cli.git
@@ -75,6 +85,17 @@ pairimprover analyze ~/path/to/session.md
 ```
 
 **Need help?** See [SETUP.md](SETUP.md) for troubleshooting and detailed walkthrough.
+
+### Publishing to npm (maintainers)
+
+Package name on npm: **`pairimprover-cli`**. Before publish:
+
+```bash
+npm run build
+npm publish --access public
+```
+
+Ensure `files` in `package.json` includes `dist` and `bin` (already set). Binaries: `pairimprover` and `pairimprover-cli` (same entry).
 
 ### Requirements
 
